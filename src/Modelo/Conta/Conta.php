@@ -4,15 +4,10 @@ namespace Alura\Banco\Modelo\Conta;
 
 use Alura\Banco\Modelo\Cpf;
 
-class Conta
+abstract class Conta
 {
     private Titular $titular;
-    private int $saldo;
-    /**
-     * @var int 1 == Conta Corrente; 2 = Poupança
-     */
-    private int $tipo;
-
+    protected int $saldo;
 
     //comum a todas
     public static int $numeroDeContas = 0;
@@ -33,11 +28,7 @@ class Conta
 
     public function saca( float $valorASacar): void
     {
-        if($this->tipo === 1) {
-            $tarifaSaque = $valorASacar * 0.05;
-        } else {
-            $tarifaSaque = $valorASacar * 0.03;
-        }
+        $tarifaSaque = $valorASacar * $this->percentualTarifa();
         $valorSaque = $valorASacar + $tarifaSaque;
 
         if($valorSaque > $this->saldo) {
@@ -90,5 +81,8 @@ class Conta
     {
         return self::$numeroDeContas + 1;
     }
+
+    //preciso que seja implementado isso aqui é quase um contrato
+    abstract protected function percentualTarifa(): float;
 }
 
