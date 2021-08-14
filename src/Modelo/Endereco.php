@@ -1,8 +1,20 @@
 <?php
 namespace Alura\Banco\Modelo;
 
-class Endereco
+/**
+ * Class Endereco
+ * @package Alura\Banco\Modelo
+ * @property-read string $cidade
+ * @property-read string $bairro
+ * @property-read string $rua
+ * @property-read string $numero
+ */
+
+final class Endereco
 {
+    // usando uma trait, ele praticamente pega o conteudo e cola aqui
+    use AcessoPropriedades;
+
     private string $cidade;
     private string $bairro;
     private string $rua;
@@ -35,4 +47,22 @@ class Endereco
     {
         return $this->numero;
     }
+
+    public function alteraCidade($novaRua): void{
+        $this->rua = $novaRua;
+    }
+
+    //alterando uma atributo com o set
+    public function __set(string $nomeAtributo, string $valor): void{
+        $metodo = 'altera' . ucfirst($nomeAtributo);
+        $this->$metodo($valor);
+
+    }
+
+    public function __toString(): string
+    {
+        return "{$this->rua}, {$this->numero}, {$this->bairro}, {$this->cidade}";
+    }
+
+
 }
